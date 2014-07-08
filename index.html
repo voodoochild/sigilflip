@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sigil Flip</title>
+  <link rel="stylesheet" href="https://d1h9a8s8eodvjz.cloudfront.net/fonts/menomonia/08-02-12/menomonia.css">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      color: #333;
+      font-family: menomonia;
+      font-size: 16px;
+    }
+    h1 {
+      font-size: 3rem;
+      margin: 20px 10px;
+    }
+    a, a:visited, a:hover, a:focus {
+      border-bottom: 1px solid #ccc;
+      color: #333;
+      font-weight: bold;
+      padding-bottom: 1px;
+      text-decoration: none;
+    }
+    article {
+      background-color: #ededed;
+      border-radius: 10px;
+      float: left;
+      line-height: 1.5;
+      margin: .5em;
+      padding: .5em 1em;
+      width: auto;
+    }
+    .good {
+      background-color: #85DA7B;
+    }
+    .profit {
+      background: #ddd;
+      display: inline-block;
+      padding: 5px;
+    }
+    .good a {
+      border-bottom-color: #56AE4A;
+    }
+    .good .profit {
+      background: #6EC962;
+    }
+    .roi {
+      font-size: 12px;
+    }
+    .loading {
+      margin: 10px;
+    }
+    @media (min-width: 600px) {
+      article {
+        width: 360px;
+      }
+      .profit {
+        margin-top: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Sigil Flip</h1>
+  <div id="exotics">
+    <p class="loading">Retrieving prices&hellip;</p>
+  </div>
+  <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
+  <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
+  <script type="text/javascript">
+    var namedExotics = [
+      [
+        "Abyssal Scepter",
+        "Superior Sigil of Rage"
+      ],
+      [
+        "Accursed Chains",
+        "Superior Sigil of Accuracy"
+      ],
+      [
+        "Adam",
+        "Superior Sigil of Intelligence"
+      ],
+      [
+        "Adder's Hiss",
+        "Superior Sigil of Earth"
+      ],
+      [
+        "Aether",
+        "Superior Sigil of Purity"
+      ],
+      [
+        "Ak-Muhl's Jaw",
+        "Superior Sigil of Leeching"
+      ],
+      [
+        "Al'ir'aska",
+        "Superior Sigil of Fire"
+      ],
+      [
+        "Alderune's Last Stand",
+        "Superior Sigil of Rage"
+      ],
+      [
+        "Ambrosia",
+        "Superior Sigil of Water"
+      ],
+      [
+        "Anton's Boot Blade",
+        "Superior Sigil of Force"
+      ],
+      [
+        "Anura",
+        "Superior Sigil of Leeching"
+      ],
+      [
+        "Arachnophobia",
+        "Superior Sigil of the Night"
+      ],
+      [
+        "Arcanus Obscurus",
+        "Superior Sigil of Water"
+      ],
+      [
+        "Arc",
+        "Superior Sigil of Nullification"
+      ],
+      [
+        "Arthropoda",
+        "Superior Sigil of Frailty"
+      ],
+      [
+        "Atlatl",
+        "Superior Sigil of Corruption"
+      ],
+      [
+        "Avirdanag",
+        "Superior Sigil of Bloodlust"
+      ],
+      [
+        "Axiquiotl",
+        "Superior Sigil of Earth"
+      ],
+      [
+        "Azure Railgun",
+        "Superior Sigil of Water"
+      ],
+      [
+        "Azureflame",
+        "Superior Sigil of Purity"
+      ],
+      [
+        "Beacon of Kryta",
+        "Superior Sigil of Hobbling"
+      ],
+      [
+        "Beacon of Light",
+        "Superior Sigil of Battle"
+      ],
+      [
+        "Beacon of the True Legions",
+        "Superior Sigil of Intelligence"
+      ],
+      [
+        "Big Juju",
+        "Superior Sigil of Force"
+      ],
+      [
+        "Bite of the Ebon Viper",
+        "Superior Sigil of Air"
+      ],
+      [
+        "Black Fleet Bludgeon",
+        "Superior Sigil of Force"
+      ],
+      [
+        "Blastmaster 3000",
+        "Superior Sigil of Serpent Slaying"
+      ],
+      [
+        "Blaze of the Serpents",
+        "Superior Sigil of Perception"
+      ],
+      [
+        "Bloodseeker",
+        "Superior Sigil of Demon Summoning"
+      ],
+      [
+        "Bonetti's Rapier",
+        "Superior Sigil of Bloodlust"
+      ],
+      [
+        "Bow of the Pale Stag",
+        "Superior Sigil of Force"
+      ],
+      [
+        "Bow of the White Hart",
+        "Superior Sigil of Perception"
+      ],
+      [
+        "Bramblethorne",
+        "Superior Sigil of Chilling"
+      ],
+      [
+        "Brandt",
+        "Superior Sigil of Intelligence"
+      ],
+      [
+        "Breath of Flame",
+        "Superior Sigil of Peril"
+      ],
+      [
+        "Carcharias",
+        "Superior Sigil of Rage"
+      ],
+      [
+        "Chalice of the Gods",
+        "Superior Sigil of Energy"
+      ],
+      [
+        "Chaos Gun",
+        "Superior Sigil of Rage"
+      ],
+      [
+        "Charrzooka",
+        "Superior Sigil of Accuracy"
+      ],
+      [
+        "Claws of the Desert",
+        "Superior Sigil of Battle"
+      ],
+      [
+        "Cobalt",
+        "Superior Sigil of Hydromancy"
+      ],
+      [
+        "Coiler",
+        "Superior Sigil of Blood"
+      ],
+      [
+        "Coldsnap",
+        "Superior Sigil of Perception"
+      ],
+      [
+        "Combustion",
+        "Superior Sigil of Fire"
+      ],
+      [
+        "Combustion",
+        "Superior Sigil of Accuracy"
+      ],
+      [
+        "Cooguloosh",
+        "Superior Sigil of Battle"
+      ],
+      [
+        "Courage",
+        "Superior Sigil of Energy"
+      ],
+      [
+        "Cragstone",
+        "Superior Sigil of Debility"
+      ],
+      [
+        "Crustacea",
+        "Superior Sigil of Frailty"
+      ],
+      [
+        "Crystal Guardian",
+        "Superior Sigil of Bloodlust"
+      ],
+      [
+        "Crystalline Blade",
+        "Superior Sigil of Air"
+      ],
+      [
+        "Cutthroat Caller",
+        "Superior Sigil of Perception"
+      ],
+      [
+        "Dawn",
+        "Superior Sigil of Rage"
+      ],
+      [
+        "Deathwish",
+        "Superior Sigil of Blood"
+      ],
+      [
+        "Defiant Blaze",
+        "Superior Sigil of Energy"
+      ],
+      [
+        "Delusion",
+        "Superior Sigil of Corruption"
+      ],
+      [
+        "Dhuumseal",
+        "Superior Sigil of Rage"
+      ],
+      [
+        "Dragonfury",
+        "Superior Sigil of Smoldering"
+      ],
+      [
+        "Dragonshot",
+        "Superior Sigil of Chilling"
+      ],
+      [
+        "Dragonspine",
+        "Superior Sigil of Venom"
+      ],
+      [
+        "Drakestrike",
+        "Superior Sigil of Leeching"
+      ],
+      [
+        "Drakevenom",
+        "Superior Sigil of Restoration"
+      ],
+      [
+        "Dreadwing",
+        "Superior Sigil of Hobbling"
+      ],
+      [
+        "Droknar's Forgehammer",
+        "Superior Sigil of Agony"
+      ],
+      [
+        "Droknar's Recurve Bow",
+        "Superior Sigil of Water"
+      ],
+      [
+        "Droknar's Short Bow",
+        "Superior Sigil of Water"
+      ],
+      [
+        "Dusk",
+        "Superior Sigil of Rage"
+      ],
+      [
+        "Ebonblade",
+        "Superior Sigil of Battle"
+      ],
+      [
+        "Éibhear Dunn",
+        "Superior Sigil of Intelligence"
+      ],
+      [
+        "Éibhear Finn",
+        "Superior Sigil of Earth"
+      ],
+      [
+        "Eidolon",
+        "Superior Sigil of Nullification"
+      ],
+      [
+        "Eir's Longbow",
+        "Superior Sigil of Ice"
+      ],
+      [
+        "Eir's Short Bow",
+        "Superior Sigil of Accuracy"
+      ],
+      [
+        "Emberglow",
+        "Superior Sigil of Geomancy"
+      ],
+      [
+        "Emberspire",
+        "Superior Sigil of Smoldering"
+      ],
+      [
+        "Entropy",
+        "Superior Sigil of Blood"
+      ],
+      [
+        "Exterminator",
+        "Superior Sigil of Purity"
+      ],
+      [
+        "Eye of Rodgort",
+        "Superior Sigil of Blood"
+      ],
+      [
+        "Faithful",
+        "Superior Sigil of Fire"
+      ],
+      [
+        "Feathers of Dwayna",
+        "Superior Sigil of Air"
+      ],
+      [
+        "Final Curse",
+        "Superior Sigil of Earth"
+      ],
+      [
+        "Firebringer",
+        "Superior Sigil of Smoldering"
+      ],
+      [
+        "Firelighter",
+        "Superior Sigil of Restoration"
+      ],
+      [
+        "Fixer Upper",
+        "Superior Sigil of Energy"
+      ],
+      [
+        "Flamebelcher",
+        "Superior Sigil of Accuracy"
+      ],
+      [
+        "Flux Matrix",
+        "Superior Sigil of Geomancy"
+      ],
+      [
+        "Foefire's Essence",
+        "Superior Sigil of Life"
+      ],
+      [
+        "Foefire's Power",
+        "Superior Sigil of Peril"
+      ],
+      [
+        "Ganadriva",
+        "Superior Sigil of Corruption"
+      ],
+      [
+        "Gaze",
+        "Superior Sigil of Demon Summoning"
+      ],
+      [
+        "Gearbore",
+        "Superior Sigil of Rage"
+      ],
+      [
+        "Genesis",
+        "Superior Sigil of Life"
+      ],
+      [
+        "Glimmerfang",
+        "Superior Sigil of Purity"
+      ],
+      [
+        "Glint's Scale",
+        "Superior Sigil of Rage"
+      ],
+      [
+        "Goblet of Kings",
+        "Superior Sigil of Stamina"
+      ],
+      [
+        "Godswalk Enchiridion",
+        "Superior Sigil of Chilling"
+      ],
+      [
+        "Grimward",
+        "Superior Sigil of Nullification"
+      ],
+      [
+        "Guardian of the Six",
+        "Superior Sigil of Intelligence"
+      ],
+      [
+        "Guild Defender",
+        "Superior Sigil of Stamina"
+      ],
+      [
+        "Gungnir",
+        "Superior Sigil of Serpent Slaying"
+      ],
+      [
+        "Handheld Disaster",
+        "Superior Sigil of Geomancy"
+      ],
+      [
+        "Heart of Mellaggan",
+        "Superior Sigil of Geomancy"
+      ],
+      [
+        "Honor of Humanity",
+        "Superior Sigil of Bloodlust"
+      ],
+      [
+        "Horn of the Rogue Bull",
+        "Superior Sigil of Hydromancy"
+      ],
+      [
+        "Howl",
+        "Superior Sigil of Rage"
+      ],
+      [
+        "Hypnotic Scepter",
+        "Superior Sigil of Rage"
+      ],
+      [
+        "Ignus Fatuus",
+        "Superior Sigil of Peril"
+      ],
+      [
+        "Illusion",
+        "Superior Sigil of Peril"
+      ],
+      [
+        "Ilya",
+        "Superior Sigil of Nullification"
+      ],
+      [
+        "Immobulus",
+        "Superior Sigil of Stamina"
+      ],
+      [
+        "Impaler",
+        "Superior Sigil of Frailty"
+      ],
+      [
+        "Imryldyeen",
+        "Superior Sigil of Force"
+      ],
+      [
+        "Infinite Light",
+        "Superior Sigil of Luck"
+      ],
+      [
+        "Infinite Wisdom",
+        "Superior Sigil of Geomancy"
+      ],
+      [
+        "Ironfist",
+        "Superior Sigil of Earth"
+      ],
+      [
+        "Jaws of Death",
+        "Superior Sigil of Corruption"
+      ],
+      [
+        "Jora's Defender",
+        "Superior Sigil of Debility"
+      ],
+      [
+        "Jormag's Breath",
+        "Superior Sigil of Ice"
+      ],
+      [
+        "Jormag's Needle",
+        "Superior Sigil of Hydromancy"
+      ],
+      [
+        "Kenshi's Wing",
+        "Superior Sigil of Peril"
+      ],
+      [
+        "Kevin",
+        "Superior Sigil of Grawl Slaying"
+      ],
+      [
+        "Khrysaor, the Golden Sword",
+        "Superior Sigil of Air"
+      ],
+      [
+        "King's Remembrance",
+        "Superior Sigil of Accuracy"
+      ],
+      [
+        "Knot of Justice",
+        "Superior Sigil of Restoration"
+      ],
+      [
+        "Knowledge is Power",
+        "Superior Sigil of Stamina"
+      ],
+      [
+        "Kodanroar",
+        "Superior Sigil of Battle"
+      ],
+      [
+        "Komalie's Sacrificial Blade",
+        "Superior Sigil of Demon Summoning"
+      ],
+      [
+        "Kryta's Embrace",
+        "Superior Sigil of Rage"
+      ],
+      [
+        "Kryta's Salvation",
+        "Superior Sigil of Perception"
+      ],
+      [
+        "Kymswarden",
+        "Superior Sigil of Corruption"
+      ],
+      [
+        "Labrys",
+        "Superior Sigil of Hobbling"
+      ],
+      [
+        "Leaf of Kudzu",
+        "Superior Sigil of Rage"
+      ],
+      [
+        "Levvi's Detector",
+        "Superior Sigil of Speed"
+      ],
+      [
+        "Lidless Eye",
+        "Superior Sigil of Blood"
+      ],
+      [
+        "Limitless Furnace",
+        "Superior Sigil of Rage"
+      ],
+      [
+        "Lord Taeres's Shadow",
+        "Superior Sigil of Bloodlust"
+      ],
+      [
+        "Lyss",
+        "Superior Sigil of Nullification"
+      ],
+      [
+        "Magmaton",
+        "Superior Sigil of Fire"
+      ],
+      [
+        "Malachidean",
+        "Superior Sigil of Hydromancy"
+      ],
+      [
+        "Malefacterym",
+        "Superior Sigil of Blood"
+      ],
+      [
+        "Malice",
+        "Superior Sigil of Debility"
+      ],
+      [
+        "Master Blaster",
+        "Superior Sigil of Restoration"
+      ],
+      [
+        "Maw of the Damned",
+        "Superior Sigil of Force"
+      ],
+      [
+        "Mecha Anchor",
+        "Superior Sigil of Benevolence"
+      ],
+      [
+        "Melandru's Gaze",
+        "Superior Sigil of Earth"
+      ],
+      [
+        "Memory of the Sky",
+        "Superior Sigil of Restoration"
+      ],
+      [
+        "Mirage",
+        "Superior Sigil of Blood"
+      ],
+      [
+        "Mojo",
+        "Superior Sigil of Leeching"
+      ],
+      [
+        "Monsoon",
+        "Superior Sigil of Water"
+      ],
+      [
+        "Moonshank",
+        "Superior Sigil of Perception"
+      ],
+      [
+        "Moonshine",
+        "Superior Sigil of Air"
+      ],
+      [
+        "Naegling",
+        "Superior Sigil of Nullification"
+      ],
+      [
+        "Naga Fang",
+        "Superior Sigil of Ice"
+      ],
+      [
+        "Nitro",
+        "Superior Sigil of Water"
+      ],
+      [
+        "Occultist Flame",
+        "Superior Sigil of Geomancy"
+      ],
+      [
+        "Oikoumene",
+        "Superior Sigil of Earth"
+      ],
+      [
+        "Ophidian",
+        "Superior Sigil of Venom"
+      ],
+      [
+        "Peasant's Solution",
+        "Superior Sigil of Air"
+      ],
+      [
+        "Phoenix Reborn",
+        "Superior Sigil of Fire"
+      ],
+      [
+        "Phoenix Talon",
+        "Superior Sigil of Bloodlust"
+      ],
+      [
+        "Poyaqui's Noggin",
+        "Superior Sigil of Life"
+      ],
+      [
+        "Rage",
+        "Superior Sigil of Rage"
+      ],
+      [
+        "Razah's Nightmare",
+        "Superior Sigil of Corruption"
+      ],
+      [
+        "Razorstone",
+        "Superior Sigil of Debility"
+      ],
+      [
+        "Reaver of the Mists",
+        "Superior Sigil of Nullification"
+      ],
+      [
+        "Remnant of Ascalon",
+        "Superior Sigil of Life"
+      ],
+      [
+        "Resonator",
+        "Superior Sigil of Life"
+      ],
+      [
+        "Rhongomyniad",
+        "Superior Sigil of Stamina"
+      ],
+      [
+        "Rivetwall",
+        "Superior Sigil of Stamina"
+      ],
+      [
+        "Rockweed Spire",
+        "Superior Sigil of Earth"
+      ],
+      [
+        "Rodgort's Flame",
+        "Superior Sigil of Rage"
+      ],
+      [
+        "Ruinmaker",
+        "Superior Sigil of Accuracy"
+      ],
+      [
+        "Rusttooth",
+        "Superior Sigil of Force"
+      ],
+      [
+        "Sarraceinaceae",
+        "Superior Sigil of Purity"
+      ],
+      [
+        "Scepter of the Highborn",
+        "Superior Sigil of Blood"
+      ],
+      [
+        "Scorchrazor's Fist",
+        "Superior Sigil of Leeching"
+      ],
+      [
+        "Serpentsniper",
+        "Superior Sigil of Earth"
+      ],
+      [
+        "Serpentstone",
+        "Superior Sigil of Purity"
+      ],
+      [
+        "Shield of the Moon",
+        "Superior Sigil of Purity"
+      ],
+      [
+        "Shield of the Wing",
+        "Superior Sigil of Battle"
+      ],
+      [
+        "Shiverstone",
+        "Superior Sigil of Ice"
+      ],
+      [
+        "Silence",
+        "Superior Sigil of Hobbling"
+      ],
+      [
+        "Siren's Call",
+        "Superior Sigil of Life"
+      ],
+      [
+        "Skybringer",
+        "Superior Sigil of Life"
+      ],
+      [
+        "Song of the Numberless Pack",
+        "Superior Sigil of Geomancy"
+      ],
+      [
+        "Song of the Temptress",
+        "Superior Sigil of Water"
+      ],
+      [
+        "Soulshard",
+        "Superior Sigil of Nullification"
+      ],
+      [
+        "Spade of the Deep",
+        "Superior Sigil of Perception"
+      ],
+      [
+        "Spark",
+        "Superior Sigil of Rage"
+      ],
+      [
+        "Spectral Wave Modulator",
+        "Superior Sigil of Chilling"
+      ],
+      [
+        "Spirit Links",
+        "Superior Sigil of Rage"
+      ],
+      [
+        "Squeedily Spooch",
+        "Superior Sigil of Venom"
+      ],
+      [
+        "Stardust",
+        "Superior Sigil of Accuracy"
+      ],
+      [
+        "SteamFire",
+        "Superior Sigil of Serpent Slaying"
+      ],
+      [
+        "Storm",
+        "Superior Sigil of Rage"
+      ],
+      [
+        "Stygian Blade",
+        "Superior Sigil of Demon Summoning"
+      ],
+      [
+        "Sun God's Gift",
+        "Superior Sigil of Hydromancy"
+      ],
+      [
+        "Super Hyperbeam Alpha",
+        "Superior Sigil of Air"
+      ],
+      [
+        "Tear of Grenth",
+        "Superior Sigil of Hydromancy"
+      ],
+      [
+        "The Anomaly",
+        "Superior Sigil of Nullification"
+      ],
+      [
+        "The Bard",
+        "Superior Sigil of Rage"
+      ],
+      [
+        "The Briny Deep",
+        "Superior Sigil of Force"
+      ],
+      [
+        "The Chosen",
+        "Superior Sigil of Rage"
+      ],
+      [
+        "The Colossus",
+        "Superior Sigil of Rage"
+      ],
+      [
+        "The Crossing",
+        "Superior Sigil of the Night"
+      ],
+      [
+        "The Energizer",
+        "Superior Sigil of Rage"
+      ],
+      [
+        "The Fate of Menzies",
+        "Superior Sigil of Blood"
+      ],
+      [
+        "The Hunter",
+        "Superior Sigil of Rage"
+      ],
+      [
+        "The Hunt",
+        "Superior Sigil of Geomancy"
+      ],
+      [
+        "The Legend",
+        "Superior Sigil of Rage"
+      ],
+      [
+        "The Lover",
+        "Superior Sigil of Rage"
+      ],
+      [
+        "The Mad Moon",
+        "Superior Sigil of the Night"
+      ],
+      [
+        "The Malestrom",
+        "Superior Sigil of Ice"
+      ],
+      [
+        "The Punisher",
+        "Superior Sigil of Hydromancy"
+      ],
+      [
+        "The Stingray",
+        "Superior Sigil of Bloodlust"
+      ],
+      [
+        "The Ugly Stick",
+        "Superior Sigil of Bloodlust"
+      ],
+      [
+        "Tinwail",
+        "Superior Sigil of Energy"
+      ],
+      [
+        "Titans' Vengeance",
+        "Superior Sigil of Fire"
+      ],
+      [
+        "Tooth of Frostfang",
+        "Superior Sigil of Rage"
+      ],
+      [
+        "Trident of the True Legion",
+        "Superior Sigil of Force"
+      ],
+      [
+        "Trosa's Short Bow",
+        "Superior Sigil of Venom"
+      ],
+      [
+        "Truth",
+        "Superior Sigil of Justice"
+      ],
+      [
+        "Tsunami",
+        "Superior Sigil of Bloodlust"
+      ],
+      [
+        "Twin Sisters",
+        "Superior Sigil of Force"
+      ],
+      [
+        "Twin Talons",
+        "Superior Sigil of Perception"
+      ],
+      [
+        "Unspoken Curse",
+        "Superior Sigil of Blood"
+      ],
+      [
+        "Urchin's Needles",
+        "Superior Sigil of Agony"
+      ],
+      [
+        "Usoku's Needle",
+        "Superior Sigil of Accuracy"
+      ],
+      [
+        "Venom",
+        "Superior Sigil of Rage"
+      ],
+      [
+        "Venomstriker",
+        "Superior Sigil of Smoldering"
+      ],
+      [
+        "Vera",
+        "Superior Sigil of Stamina"
+      ],
+      [
+        "Vision of the Mists",
+        "Superior Sigil of Nullification"
+      ],
+      [
+        "Volcanus",
+        "Superior Sigil of Fire"
+      ],
+      [
+        "Wall of the Mists",
+        "Superior Sigil of Nullification"
+      ],
+      [
+        "Whisperblade",
+        "Superior Sigil of Peril"
+      ],
+      [
+        "Windstorm",
+        "Superior Sigil of Perception"
+      ],
+      [
+        "Winged Spatha",
+        "Superior Sigil of Corruption"
+      ],
+      [
+        "Wings of Dwayna",
+        "Superior Sigil of Life"
+      ],
+      [
+        "Wintersbark",
+        "Superior Sigil of Hydromancy"
+      ],
+      [
+        "Wintersbite",
+        "Superior Sigil of Ice"
+      ],
+      [
+        "X6-31 Beta",
+        "Superior Sigil of Accuracy"
+      ],
+      [
+        "X7-10 Alpha",
+        "Superior Sigil of Stamina"
+      ],
+      [
+        "Zap",
+        "Superior Sigil of Rage"
+      ]
+    ];
+
+    var getItemsNames = $.getJSON('http://api.gw2tp.com/1/bulk/items-names.json');
+    var getItems = $.getJSON('http://api.gw2tp.com/1/bulk/items.json');
+
+    $.when(getItemsNames, getItems).then(function (itemsNamesResponse, itemsDataResponse) {
+
+      // Map names to ids
+      var itemsNamesData = itemsNamesResponse[0];
+      var idLookup = {};
+      _.forEach(itemsNamesData.items, function (item) {
+        idLookup[item[1]] = item[0];
+      });
+
+      // Calculate pricing
+      var itemsData = itemsDataResponse[0];
+      var priceLookup = {};
+      var profit, roi;
+      _.forEach(itemsData.items, function (item) {
+        item = _.zipObject(itemsData.columns, item);
+        profit = Math.floor((item.sell * 0.9) - (item.sell * 0.05) - item.buy);
+        priceLookup[item.id] = {
+          buy: item.buy,
+          sell: item.sell,
+          supply: item.supply,
+          demand: item.demand,
+          profit: profit,
+          roi: Math.floor((profit / item.buy) * 100) + '%'
+        };
+      });
+
+      // Assign prices to exotics
+      var pricedExotics = [];
+      var name, sigil, itemId, sigilId, itemPrices, sigilPrices;
+      _.forEach(namedExotics, function (item) {
+        name = item[0];
+        sigil = item[1];
+        if (name && sigil) {
+          itemId = idLookup[name];
+          itemPrices = priceLookup[itemId];
+          sigilId = idLookup[sigil];
+          sigilPrices = priceLookup[sigilId];
+          pricedExotics.push({
+            id: itemId,
+            name: name,
+            prices: itemPrices,
+            sigil: {
+              id: sigilId,
+              name: sigil,
+              prices: sigilPrices
+            }
+          });
+        }
+      });
+
+      // Find profitable flips
+      var profitableFlips = [];
+      _.forEach(pricedExotics, function (item) {
+        if (item.prices && item.sigil && item.sigil.prices && item.sigil.prices.sell > item.prices.sell) {
+          profit = Math.floor((item.sigil.prices.sell * 0.9) - (item.sigil.prices.sell * 0.05) - item.prices.buy);
+          roi = Math.floor((profit / item.prices.buy) * 100);
+          if (roi > 0) {
+            item.sigilFlipProfit = profit;
+            item.sigilFlipROI = roi+'%';
+            profitableFlips.push({
+              name: item.name,
+              url: 'http://www.gw2tp.com/search?name='+item.name,
+              buy: item.prices.buy / 100,
+              sigil: {
+                name: item.sigil.name,
+                url: 'http://www.gw2tp.com/search?name='+item.sigil.name,
+                sell: item.sigil.prices.sell / 100
+              },
+              profit: item.sigilFlipProfit / 100,
+              roi: item.sigilFlipROI
+            });
+          }
+        }
+      });
+
+      // Render the results
+      var render = _.template(
+        '<article class="<%= css %>">'+
+          '<p>Buy <a href="<%= url %>" target="_blank"><%= name %></a> for <b><%= buy %></b></p>'+
+          '<p>Sell <a href="<%= sigil.url %>" target="_blank"><%= sigil.name %></a> for <b><%= sigil.sell %></b></p>'+
+          '<p><span class="profit">Profit: <b><%= profit %></b> <span class="roi">(<%= roi %> ROI)</span></span></p>'+
+        '</article>'
+      );
+
+      _.forEach(profitableFlips, function (item) {
+        item.buy = Number(item.buy).toFixed(2);
+        item.sigil.sell = Number(item.sigil.sell).toFixed(2);
+        item.profit = Number(item.profit).toFixed(2);
+        item.css = item.profit > 40 ? 'good' : '';
+      });
+
+      $('#exotics').html(_.map(profitableFlips, render).join(''));
+    });
+  </script>
+</body>
+</html>
